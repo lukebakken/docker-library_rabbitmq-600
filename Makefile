@@ -1,6 +1,6 @@
-.PHONY: clean down fresh perms rmq-perms up
+.PHONY: build clean down fresh up
 
-clean: down perms
+clean: down
 	docker compose rm --force
 
 down:
@@ -8,11 +8,8 @@ down:
 
 fresh: down clean up
 
-perms:
-	sudo chown -R "$(USER):$(USER)" .
+build:
+	docker compose build
 
-rmq-perms:
-	sudo chown -R "999:999" $(CURDIR)/rabbitmq.conf $(CURDIR)/enabled_plugins
-
-up: rmq-perms
+up: build
 	docker compose up
