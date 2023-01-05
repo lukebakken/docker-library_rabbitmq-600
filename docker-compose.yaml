@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    environment:
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '-rabbitmq_stream advertised_host rabbitmq'
+    ports:
+      - '5672:5672'
+      - '5552:5552'
+      - '15672:15672'
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 15s
+      timeout: 15s
+      retries: 5
